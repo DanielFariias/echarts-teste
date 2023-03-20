@@ -1,0 +1,22 @@
+.styles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.ButtonHover {
+  background-color: #5470c6;
+  padding: 15px 30px;
+  margin: 10px 0 20px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.ButtonHover:hover {
+  background-color: #5470c690;
+}
