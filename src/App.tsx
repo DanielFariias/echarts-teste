@@ -1,9 +1,8 @@
-import "./styles.css";
+import ReactECharts from "echarts-for-react";
 
-import { useState, useCallback } from "react";
-import BarChart from "./components/Bar";
-import Table from "./components/Table";
-import PizzaChart from "./components/Pizza";
+import "./styles.css";
+import ContentGraphic from "./components/ContentGraphic";
+import { useState } from "react";
 
 export type IData = {
   letter: string;
@@ -15,7 +14,7 @@ export type ISelectedValue = {
   value: any;
 };
 
-const defaultData: IData[] = [
+const data: IData[] = [
   {
     letter: "A",
     number: 10,
@@ -59,91 +58,62 @@ function App() {
     null
   );
 
-  const handleSelectValue = useCallback((params: any) => {
-    if (!params.value) return;
-
-    const name =
-      params.componentSubType === "pie"
-        ? params.name.split("-")[0]
-        : params.name;
-
-    const NewValue = {
-      name,
-      value: params.value,
-    };
-
-    setSelectedValue(NewValue);
-  }, []);
+  const opt = {
+    title: {
+      text: "",
+      left: "center",
+    },
+    xAxis: {
+      type: "category",
+      data: datav.map((i) => i.BOOK),
+    },
+    yAxis: {
+      type: "value",
+    },
+    tooltip: {
+      triggerOn: "none",
+      alwaysShowContent: true,
+      position: function(pt) {
+        return [pt[0], 130];
+      },
+      order: "valueDesc"
+    },
+    series: [
+      {
+        data: datav.sort((a, b) => b.DIFF - a.DIFF).map((i) => (i["DIFF"]*1000).toFixed(3)),
+        type: "bar",
+        label: {
+          show: true,
+          position: "top",
+        },
+        emphasis: {
+          itemStyle: {
+            color: "#1870ff",
+            animationDelay: (dataIndex: number) => dataIndex * 30,
+            animationDuration: 1000,
+          },
+          textStyle: {
+            color: "#fff",
+            fontSize: 16,
+            animationDelay: 200,
+            animationDuration: 1000,
+          },
+        },
+      },
+    ],
+  };
 
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <button onClick={() => setSelectedValue(null)} className="ButtonHover">
-          Clear Selected Value
-        </button>
-      </div>
-      <div style={{ display: "flex" }}>
-        <BarChart
-          data={defaultData}
-          handleSelectValue={handleSelectValue}
-          selectedValue={selectedValue}
-        />
-        <PizzaChart
-          data={defaultData}
-          handleSelectValue={handleSelectValue}
-          selectedValue={selectedValue}
-        />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <h1 style={{ color: "#5470c6" }}>
-          {selectedValue?.value || "Nenhum valor selecionado"}
-        </h1>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 160,
-          }}
-        >
-          <Table
-           title='Filtrados'
-            data={
-              selectedValue?.value
-                ? defaultData.filter((i) =>
-                    i.letter.includes(selectedValue?.name)
-                  )
-                : defaultData
-            }
-          />
-          <Table
-          title='Diferentes'
-            data={
-              selectedValue?.value
-                ? defaultData.filter(
-                    (i) => !i.letter.includes(selectedValue?.name)
-                  )
-                : defaultData
-            }
-          />
-        </div>
-      </div>
-    </>
+    <div>
+      <ReactECharts
+        option={opt}
+      />
+      {/* <ContentGraphic /> */}
+
+    </div>
   );
 }
 
 export default App;
+
+const datav = []

@@ -1,5 +1,5 @@
 import ReactECharts from "echarts-for-react";
-import { IData, ISelectedValue } from "../App";
+import { IData, ISelectedValue } from "./ContentGraphic";
 
 interface BarChartProps {
   data: IData[];
@@ -31,7 +31,6 @@ const BarChart: React.FC<BarChartProps> = ({
         label: {
           show: true,
           position: "top",
-          valueAnimation: true,
         },
         emphasis: {
           itemStyle: {
